@@ -1,38 +1,70 @@
 class Node:
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, title, description):
+        self.title = title
+        self.description = description
+        self.completed = False
         self.next = None
 
-class DynamicStack:
+class TaskManager:
     def __init__(self):
         self.head = None
-        self.size = 0
-    
-    def isEmpty(self):
-        return self.size == 0
-    
-    def push(self, value):
-        new_node = Node(value)
-        new_node.next = self.head
-        self.head = new_node
-        self.size += 1
 
-    def pop(self, value):
-        value = 
-        new_node = node
-        completed = self.head.value
-        self.head = self.head.next
-        self.size -= 1
-        return completed
+    def add_task(self, title, description):
+        node = Node(title, description)
+        if not self.head:
+            self.head = node
+        else:
+            current = self.head
+            while current.next:
+                current = current.next
+            current.next = node
+        print(f"Task '{title}' added successfully!")
 
-    def display(self):
+    def mark_task_as_completed(self, title):
         current = self.head
         while current:
-            print(current.value, end = " | ")
+            if current.title == title:
+                current.completed = True
+                print(f"Task '{title}' marked as completed!")
+                return
             current = current.next
-        print("End")
-    
+        print(f"Task '{title}' not found!")
 
-TaskManager = DynamicStack()
-TaskManager.push("Cook: Cook Fish")
-TaskManager.display()
+    def display_tasks(self):
+        if not self.head:
+            print("No tasks in the list.")
+        else:
+            print("Task List:")
+            current = self.head
+            while current:
+                status = "Completed" if current.completed else "Not Completed"
+                print(f"Title: {current.title}, Description: {current.description}, Status: {status}")
+                current = current.next
+
+    def run(self):
+        while True:
+            print("\nTask Manager Menu:")
+            print("1. Add your Tasks")
+            print("2. Display your Tasks")
+            print("3. Mark your Tasks as Completed")
+            print("4. Exit")
+            choice = input("Please enter your choice (1 | 2 | 3 | 4): ")
+
+            if choice == "1":
+                title = input("Enter task title: ")
+                description = input("Additional description: ")
+                self.add_task(title, description)
+            elif choice == "2":
+                self.display_tasks()
+            elif choice == "3":
+                title = input("Type tasks that have been completed: ")
+                self.mark_task_as_completed(title)
+            elif choice == "4":
+                print("Exiting Task Manager.")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    task_manager = TaskManager()
+    task_manager.run()
